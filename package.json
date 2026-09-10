@@ -1,0 +1,19 @@
+{
+  "name": "rec-hall-visiting-teams",
+  "version": "1.0.0",
+  "description": "Rec Hall visiting team welcome kiosk — iPad touchscreen with welcome guide, instructions, and event-day timing sheet",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.5"
+  }
+}

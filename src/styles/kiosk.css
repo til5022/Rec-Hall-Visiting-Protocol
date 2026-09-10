@@ -1,0 +1,65 @@
+:root {
+  --psu-navy: #041e42;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--psu-navy);
+  overscroll-behavior: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.app {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.sign-screen {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: var(--psu-navy);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sign-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.info-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.info-fallback code {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
