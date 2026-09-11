@@ -43,23 +43,3 @@ body {
   object-fit: contain;
   object-position: center;
 }
-
-.info-fallback {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
-  text-align: center;
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 22px;
-  line-height: 1.5;
-}
-
-.info-fallback code {
-  background: rgba(255, 255, 255, 0.12);
-  padding: 2px 8px;
-  border-radius: 6px;
-}

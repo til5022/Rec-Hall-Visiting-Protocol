@@ -47,14 +47,11 @@ export default function App() {
         </div>
       ) : (
         <div className="sign-screen">
-          <div className="info-fallback">
-            <p>Add <code>info.jpg</code> to the <code>public/</code> folder to display the event schedule here.</p>
-          </div>
           <img
             src={infoSrc}
             alt="Event schedule and rotation order"
             className="sign-image"
-            onError={e => { e.currentTarget.style.display = 'none'; }}
+            onError={e => { e.currentTarget.style.visibility = 'hidden'; }}
           />
         </div>
       )}
