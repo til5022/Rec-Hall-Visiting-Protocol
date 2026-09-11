@@ -45,9 +45,20 @@ filenames (see **Updating content once it's live** below).
 
 If neither Airtable nor `schedule.json` is set up (or nothing in them
 applies), the kiosk falls back to plain `public/welcome.jpg` /
-`public/info.jpg` — the original single-event setup still works. If the
-resolved info image is missing, the info screen shows a placeholder message
-instead of a blank/broken image.
+`public/info.jpg` — the original single-event setup still works.
+
+### Multiple iPads showing different teams at once
+
+For a normal day with one visiting team, every iPad shows the same thing —
+nothing extra to do. For a day with several simultaneous visiting teams
+(e.g. a triangular meet), each iPad needs to show a different team. Both
+Airtable and `schedule.json` support an optional **Station** value per row:
+
+- Leave it blank → that row shows on every iPad, as usual.
+- Set it to `1`, `2`, or `3` → that row only shows on the iPad set up with
+  the matching station (see **Running as a fullscreen kiosk on iPad**
+  below for the one-time per-iPad setup). For a 3-team day, add three rows
+  with the same date and station `1`, `2`, `3` respectively.
 
 ## Setting up Airtable
 
@@ -58,6 +69,9 @@ instead of a blank/broken image.
    - **Date** — field type *Date*
    - **Welcome Image** — field type *Attachment*
    - **Info Image** — field type *Attachment*
+   - **Station** — field type *Single line text* (optional — only needed
+     for multi-team days, see **Multiple iPads showing different teams at
+     once** above)
 3. Add a row per event: pick the date, drag the welcome graphic into
    **Welcome Image**, drag the info graphic into **Info Image**.
 4. Get your **Base ID**: with the base open, go to
@@ -130,11 +144,24 @@ No Mac, no terminal — do this straight from a browser on github.com:
 
 ## Running as a fullscreen kiosk on iPad
 
-1. On the iPad, open the Netlify site URL in Safari.
+1. On the iPad, open the Netlify site URL in Safari. If this iPad is one of
+   several used for simultaneous multi-team days, add `?station=1` (or `2`,
+   `3`, matching whichever number you'll assign this specific iPad) to the
+   end of the URL before continuing — e.g.
+   `https://rechallprotocol.netlify.app/?station=1`. If you only ever have
+   one visiting team at a time, skip this and just use the plain URL on
+   every iPad.
 2. Tap the Share button → **Add to Home Screen**. This creates an app icon
-   that launches without Safari's address bar or browser chrome.
+   that launches without Safari's address bar or browser chrome. When
+   naming the icon, include the station number if you used one (e.g.
+   "Rec Hall 1") so it's obvious later which iPad this is.
 3. Launch from the Home Screen icon.
-4. For a fully locked-down kiosk (visitors can't leave the app or access
+4. Physically label the iPad itself (a piece of tape, a label maker, etc)
+   with the same number — the Home Screen icon name isn't visible once the
+   kiosk is running fullscreen, so you'll want a physical label to tell
+   iPads apart at a glance. Keep a note somewhere of which physical
+   location/team-area each station number corresponds to.
+5. For a fully locked-down kiosk (visitors can't leave the app or access
    other iPad features), enable **Guided Access**:
    - Settings → Accessibility → Guided Access → turn on.
    - Open the Rec Hall app from the Home Screen, then triple-click the side
