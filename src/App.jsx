@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { loadSchedule } from './data/loadSchedule.js';
+import { loadActiveEvent } from './data/loadSchedule.js';
 
 const INFO_DISPLAY_MS = 10_000;
 const SCHEDULE_RECHECK_MS = 30 * 60_000;
@@ -20,10 +20,10 @@ export default function App() {
 
   useEffect(() => {
     const applySchedule = () => {
-      loadSchedule().then(active => {
+      loadActiveEvent().then(active => {
         if (active) {
-          setWelcomeSrc(`./${active.welcome}`);
-          setInfoSrc(`./${active.info}`);
+          setWelcomeSrc(active.welcome);
+          setInfoSrc(active.info);
         }
       });
     };

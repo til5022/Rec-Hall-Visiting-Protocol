@@ -13,8 +13,24 @@ images with `object-fit: contain`, so the whole graphic is always shown
 uncropped; if the iPad's screen ratio doesn't exactly match 1080×1920,
 you'll get thin bars on the edges rather than any cropping or distortion.
 
-**You can queue up an entire season at once** instead of swapping files
-right before each event. Content is driven by `public/schedule.json`:
+**You can queue up an entire season at once** instead of swapping content
+right before each event — the kiosk automatically shows whichever event's
+date is today or next upcoming, and moves on to the next one by itself once
+a date passes (it rechecks every 30 minutes, no page reload needed). If
+every date in the schedule is in the past, it keeps showing the most recent
+one rather than going blank.
+
+There are two ways to manage the schedule — you can use either, or both
+(Airtable takes priority if it's set up):
+
+### Option A: Airtable (no GitHub needed for routine updates)
+
+Set up once (see **Setting up Airtable** below), then for every new event
+staff just add a row: set the date, drag the welcome image into the
+**Welcome Image** cell, drag the info image into the **Info Image** cell.
+That's it — no filenames to type, no uploading to GitHub, nothing technical.
+
+### Option B: `public/schedule.json` (stays entirely in GitHub)
 
 ```json
 [
@@ -23,28 +39,47 @@ right before each event. Content is driven by `public/schedule.json`:
 ]
 ```
 
-For each new event:
+For each event: export the graphics with unique filenames, upload both to
+`public/` on github.com, then add a row here with that date and the two
+filenames (see **Updating content once it's live** below).
 
-1. Export its welcome/info graphics with unique filenames (don't reuse
-   `welcome-1.jpg` etc — bump the number, or use anything unique like
-   `welcome-ohio-state.jpg`).
-2. Upload both image files to `public/` (see **Updating content once it's
-   live** below).
-3. Add a new row to `schedule.json` with that event's date (`YYYY-MM-DD`)
-   and the two filenames you just uploaded.
+If neither Airtable nor `schedule.json` is set up (or nothing in them
+applies), the kiosk falls back to plain `public/welcome.jpg` /
+`public/info.jpg` — the original single-event setup still works. If the
+resolved info image is missing, the info screen shows a placeholder message
+instead of a blank/broken image.
 
-The kiosk automatically shows whichever event's date is today or next
-upcoming — no manual switching, no need to be at the venue when an event
-starts. Once an event's date passes, the kiosk moves on to the next entry
-in the list by itself (it rechecks the schedule every 30 minutes, so this
-happens live without needing a page reload). If you're ever past every date
-in the list, it keeps showing the most recent one rather than going blank.
+## Setting up Airtable
 
-If `schedule.json` is missing/empty, or nothing in it applies, the kiosk
-falls back to plain `public/welcome.jpg` / `public/info.jpg` — so the
-original single-event setup still works if you don't want to use scheduling
-at all. If the resolved `info.jpg` is missing, the info screen shows a
-placeholder message instead of a blank/broken image.
+1. Create a free account at [airtable.com](https://airtable.com) and a new
+   base.
+2. In that base, create (or rename the default) table to **`Schedule`**
+   with exactly these fields:
+   - **Date** — field type *Date*
+   - **Welcome Image** — field type *Attachment*
+   - **Info Image** — field type *Attachment*
+3. Add a row per event: pick the date, drag the welcome graphic into
+   **Welcome Image**, drag the info graphic into **Info Image**.
+4. Get your **Base ID**: with the base open, go to
+   [airtable.com/create/tokens](https://airtable.com/create/tokens) (or
+   Help → API documentation) — the base ID starts with `app...`.
+5. Create a **Personal access token**: same page, **Create new token** →
+   give it a name → under **Scopes** add `data.records:read` → under
+   **Access**, add only this one base → **Create token** → copy it (shown
+   once).
+6. In Netlify: **Site configuration → Environment variables → Add a
+   variable**, and add all three:
+   - `VITE_AIRTABLE_TOKEN` — the token from step 5
+   - `VITE_AIRTABLE_BASE_ID` — the base ID from step 4
+   - `VITE_AIRTABLE_TABLE` — `Schedule`
+7. Trigger a redeploy (**Deploys → Trigger deploy → Deploy site**) so the
+   build picks up the new environment variables.
+
+Note on privacy: since this is a static site with no backend server, that
+token ends up readable inside the site's downloaded JavaScript by anyone who
+looks (same as any client-side API key). Scoping it to **read-only** access
+on **just this one base** (step 5) keeps the exposure limited to "someone
+could see your event schedule," not anything more.
 
 ## Running locally
 
