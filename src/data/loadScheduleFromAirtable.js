@@ -11,6 +11,9 @@
 //   VITE_AIRTABLE_TABLE      Table name, e.g. "Schedule"
 //
 // Table must have fields named exactly: Date, Welcome Image, Info Image.
+// An optional Station field (plain text, e.g. "1"/"2"/"3") restricts a row
+// to just one iPad — for days with multiple simultaneous visiting teams.
+// Leave it blank on a row to show it on every iPad.
 
 const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
 const BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
@@ -35,6 +38,7 @@ export async function loadScheduleFromAirtable() {
     return (records || [])
       .map(r => ({
         date: r.fields?.Date,
+        station: r.fields?.Station ? String(r.fields.Station).trim() : null,
         welcome: firstAttachmentUrl(r.fields?.['Welcome Image']),
         info: firstAttachmentUrl(r.fields?.['Info Image']),
       }))

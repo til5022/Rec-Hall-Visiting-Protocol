@@ -8,12 +8,27 @@ function todayStr() {
   return `${y}-${m}-${day}`;
 }
 
+// Station comes from a query param baked into each iPad's bookmarked URL
+// once (e.g. "?station=1"), so staff never have to touch it day to day.
+function getStation() {
+  return new URLSearchParams(window.location.search).get('station');
+}
+
+// Rows with no station apply to every iPad; rows with a station only apply
+// to the one iPad bookmarked with that station — for days with multiple
+// simultaneous visiting teams (e.g. a triangular meet).
+function forThisStation(events, station) {
+  return events.filter(e => !e.station || e.station === station);
+}
+
 // Picks today's event if one exists, otherwise the next upcoming one,
 // otherwise falls back to the most recent past event so the kiosk never
 // goes blank.
-export function pickActiveEvent(events) {
+export function pickActiveEvent(events, station = getStation()) {
   if (!Array.isArray(events) || events.length === 0) return null;
-  const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+  const relevant = forThisStation(events, station);
+  if (!relevant.length) return null;
+  const sorted = [...relevant].sort((a, b) => a.date.localeCompare(b.date));
   const today = todayStr();
   return sorted.find(e => e.date >= today) || sorted[sorted.length - 1];
 }
@@ -24,7 +39,12 @@ async function loadLocalSchedule() {
     if (!res.ok) return null;
     const events = await res.json();
     if (!Array.isArray(events)) return null;
-    return events.map(e => ({ date: e.date, welcome: `./${e.welcome}`, info: `./${e.info}` }));
+    return events.map(e => ({
+      date: e.date,
+      station: e.station ? String(e.station).trim() : null,
+      welcome: `./${e.welcome}`,
+      info: `./${e.info}`,
+    }));
   } catch {
     return null;
   }
