@@ -27,8 +27,12 @@ There are two ways to manage the schedule — you can use either, or both
 
 Set up once (see **Setting up Airtable** below), then for every new event
 staff just add a row: set the date, drag the welcome image into the
-**Welcome Image** cell, drag the info image into the **Info Image** cell.
-That's it — no filenames to type, no uploading to GitHub, nothing technical.
+**Welcome Image** cell, and (optionally) drag the info image into the
+**Info Image** cell. If there's no info image, tapping the welcome screen
+does nothing. That's it — no filenames to type, no uploading to GitHub,
+nothing technical. Once Airtable is set up, it's the only source the kiosk
+uses; the local `schedule.json` is only a fallback if Airtable can't be
+reached. Each iPad re-checks Airtable every minute.
 
 ### Option B: `public/schedule.json` (stays entirely in GitHub)
 
@@ -68,7 +72,7 @@ Airtable and `schedule.json` support an optional **Station** value per row:
    with exactly these fields:
    - **Date** — field type *Date*
    - **Welcome Image** — field type *Attachment*
-   - **Info Image** — field type *Attachment*
+   - **Info Image** — field type *Attachment* (optional)
    - **Station** — field type *Single line text* (optional — only needed
      for multi-team days, see **Multiple iPads showing different teams at
      once** above)

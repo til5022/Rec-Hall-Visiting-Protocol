@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { loadActiveEvent } from './data/loadSchedule.js';
 
 const INFO_DISPLAY_MS = 10_000;
-const SCHEDULE_RECHECK_MS = 30 * 60_000;
+const SCHEDULE_RECHECK_MS = 60_000;
 
 export default function App() {
   const [screen, setScreen] = useState('welcome');
@@ -11,7 +11,7 @@ export default function App() {
   const returnTimer = useRef(null);
 
   const showInfo = () => {
-    if (screen !== 'welcome') return;
+    if (screen !== 'welcome' || !infoSrc) return;
     setScreen('info');
     returnTimer.current = setTimeout(() => setScreen('welcome'), INFO_DISPLAY_MS);
   };

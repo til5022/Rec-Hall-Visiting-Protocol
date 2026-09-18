@@ -1,7 +1,9 @@
 // Reads the event schedule from an Airtable base. Each row (record) is one
-// event with a Date, a Welcome Image attachment, and an Info Image
+// event with a Date, a Welcome Image attachment, and an optional Info Image
 // attachment — staff manage content entirely in Airtable, no code/GitHub
-// involvement needed for routine updates.
+// involvement needed for routine updates. Returns null only if Airtable isn't
+// configured or the request fails; an empty array means Airtable answered
+// but has no usable rows.
 //
 // Requires these Vite env vars (set in Netlify: Site configuration →
 // Environment variables, and in a local .env file for `npm run dev`):
@@ -42,7 +44,7 @@ export async function loadScheduleFromAirtable() {
         welcome: firstAttachmentUrl(r.fields?.['Welcome Image']),
         info: firstAttachmentUrl(r.fields?.['Info Image']),
       }))
-      .filter(e => e.date && e.welcome && e.info);
+      .filter(e => e.date && e.welcome);
   } catch {
     return null;
   }

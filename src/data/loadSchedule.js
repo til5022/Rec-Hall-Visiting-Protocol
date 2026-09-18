@@ -51,11 +51,13 @@ async function loadLocalSchedule() {
 }
 
 // Tries Airtable first (staff manage content there with no code/GitHub
-// needed), then falls back to the local public/schedule.json + image
-// files, then to plain public/welcome.jpg + info.jpg if neither is set up.
+// needed). If Airtable answers at all, it is the source of truth — stale
+// local content is never mixed in. Only when Airtable isn't configured or is
+// unreachable does it fall back to the local public/schedule.json + image
+// files, then to plain public/welcome.jpg + info.jpg.
 export async function loadActiveEvent() {
   const airtableEvents = await loadScheduleFromAirtable();
-  if (airtableEvents?.length) return pickActiveEvent(airtableEvents);
+  if (airtableEvents) return pickActiveEvent(airtableEvents);
 
   const localEvents = await loadLocalSchedule();
   if (localEvents?.length) return pickActiveEvent(localEvents);
